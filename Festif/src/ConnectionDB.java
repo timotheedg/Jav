@@ -308,7 +308,7 @@ public class ConnectionDB {
 		}
 		
 		/** =============================================================================================
-		 * lectureArtiste
+		 * lectureStaff
 		 * 
 		 * Méthode de lecture des données de la table staff depuis la BDD
 		 * pour l'affichage dans l'application
@@ -351,7 +351,7 @@ public class ConnectionDB {
 		}
 		
 		/** =============================================================================================
-		 * lectureArtiste
+		 * lectureTechnicien
 		 * 
 		 * Méthode de lecture des données de la table technicien depuis la BDD
 		 * pour l'affichage dans l'application
@@ -694,36 +694,7 @@ public class ConnectionDB {
 	    }
  
 	    
-	    /** =============================================================================================
-		 * verifsup
-		 * 
-		 * Méthode appelée par toutes les fonctions de suppression de la classe ConnectionBD
-		 * elle prend en argument le nom à supprimer, et la table dans laquelle effectuer
-		 * la vérification avec l'argument String genre
-		 * =============================================================================================
-		 */	
-	    public static boolean verifsup(String nomt, String genre){
-	    	boolean bulle = false;
-	    	//int duplicata = 0;
-	    	try{
-	    		
-	    		String query = "SELECT nom FROM "+genre;
-	    		Connection cnx = connecterDB();
-	    		Statement st = cnx.createStatement();
-	    		ResultSet  rs = st.executeQuery(query);
-	      	   	while(rs.next()){
-	    		    String nom = rs.getString("nom");
-	    		    if (nomt.equals(nom)){
-	    		    	bulle = true;
-	    		       	//duplicata +=1;
-	    		       	   		}      	   		
-	    		       	   	}	
-	    		} catch (SQLException e){
-	        		System.out.println(e.getMessage());
-	    		}
-	    	return bulle;
-	    }
-
+	   
 	    
 	    
 	    
@@ -775,7 +746,7 @@ public class ConnectionDB {
  */	    
 	    
 	    /** =============================================================================================
-	     * suppresoptim
+	     * suppresOptim
 	     * 
 	     * Méthode d'optimisation du code pour ne pas avoir une méthode par table.
 	     * La table est appelée en paramètre (String genre),
@@ -783,17 +754,25 @@ public class ConnectionDB {
 	     *
 	     * =============================================================================================
 	     */
-	    public static void suppressoptim(String nom, String genre){
+	    public static void suppressOptim(String nom, String genre){
 	    	try{
 	    		Connection cnx = connecterDB()											;
 	    		boolean bulle = false													;
-	    		bulle = verifsup(nom,genre)												;
-	    		if (bulle ==true){
-	    			String sql = "DELETE FROM `"+genre+"` WHERE `nom`='"+nom+"'"		;
-	    			Statement sts = cnx.createStatement()								;
-	    			sts.executeUpdate(sql)												;
-	    			nom = convertString(nom)											;
-	    			System.out.println(genre+" "+nom+" supprimé.")						;
+	    		boolean bulle2 = false													;
+	    		bulle = verifSup(nom,genre)												;
+	    		bulle2 = testDuplicata(nom,genre)										;
+	    		if (bulle == true){
+	    			if (bulle2 == true){
+	    				//System.out.println("Duplicata !");
+	    				
+	    			}
+	    			else{
+	    				String sql = "DELETE FROM `"+genre+"` WHERE `nom`='"+nom+"'"		;
+		    			Statement sts = cnx.createStatement()								;
+		    			sts.executeUpdate(sql)												;
+		    			nom = convertString(nom)											;
+		    			System.out.println(genre+" "+nom+" supprimé.")						;
+	    				}
 	    		}
 	    		else{
 	    			nom = convertString(nom)											;
@@ -808,6 +787,144 @@ public class ConnectionDB {
 	    		}
 	    }
 	    
+	    
+	    /** =============================================================================================
+		 * verifSup
+		 * 
+		 * Méthode appelée par la fonction de suppression (supressOptim)  de la classe ConnectionBD
+		 * elle prend en argument le nom à supprimer, et la table dans laquelle effectuer
+		 * la vérification avec l'argument String genre
+		 * =============================================================================================
+		 */	 
+	    public static boolean verifSup(String nomt, String genre){
+	    	boolean bulle = false;
+	    	try{
+	    		String query = "SELECT nom FROM "+genre;
+	    		Connection cnx = connecterDB();
+	    		Statement st = cnx.createStatement();
+	    		ResultSet rs = st.executeQuery(query);
+	    		while (rs.next()){
+	    			String nom = rs.getString("nom");
+	    			if (nomt.equals(nom)){
+	    				bulle = true;
+	    			}
+	    		}
+	    	}catch(SQLException e){
+	    		System.out.println(e.getMessage());
+	    	}
+	    	return bulle;
+	    }
+	    
+	    
+	    /** =============================================================================================
+		 * testDuplicata
+		 * 
+		 * Méthode appelée par la fonction de suppression (supressOptim) de la classe ConnectionBD
+		 * elle prend en argument le nom à supprimer, et la table dans laquelle effectuer
+		 * la vérification avec l'argument String genre
+		 * elle retourne un booléen True si le nom passé en argument a plusieurs occurences
+		 * =============================================================================================
+		 */	
+	    public static boolean testDuplicata(String nomt, String genre){
+	    	boolean bulledup = false;
+	    	int duplicata = 0;
+	    	try{
+	    		String query = "SELECT nom FROM "+genre;
+	    		Connection cnx = connecterDB();
+	    		Statement st = cnx.createStatement();
+	    		ResultSet  rs = st.executeQuery(query);
+	      	   	while(rs.next()){
+	    		    String nom = rs.getString("nom");
+	    		    if (nomt.equals(nom)){
+	    		       	duplicata +=1;
+	    		       	   		}      	   		
+	    		       	   	}
+	      	   		if (duplicata > 1){
+	      	   			bulledup = true;
+	      	   		}
+	    		} catch (SQLException e){
+	        		System.out.println(e.getMessage());
+	    		}
+	    	return bulledup;
+	    }
+	    
+	    
+	  
+	    
+	    /** =============================================================================================
+		 * verifSupDup
+		 * 
+		 * Méthode appelée par la fonction de suppression en cas de duplicata (supDuplicata)
+		 * de la classe ConnectionBD.
+		 * Elle prend en argument le prenom à supprimer, et la table dans laquelle effectuer
+		 * la vérification avec l'argument String genre, pour vérifier que pour le nom et le prenom
+		 * saisis par l'utilisateur, il existe une occurence à supprimer 
+		 * =============================================================================================
+		 */	 
+	    public static boolean verifSupDup(String prenomB, String genre){
+	    	boolean pren = false;
+	    	try{
+	    		String query = "SELECT prenom FROM "+genre;
+	    		Connection cnx = connecterDB();
+	    		Statement st = cnx.createStatement();
+	    		ResultSet rs = st.executeQuery(query);
+	    		while (rs.next()){
+	    			String prenom = rs.getString("prenom");			
+	    			if (prenomB.equals(prenom)){
+	    				pren = true;
+	    			}
+	    		}
+	    	}catch(SQLException e){
+	    		System.out.println(e.getMessage());
+	    	}
+	    	return pren;
+	    }
+
+	    
+	   
+	    
+	    /** =============================================================================================
+		 * supDuplicata
+		 * 
+		 * Méthode appelée  avec les argument String nom, String prénom et String genre,
+		 * dans le cas d'une entrée de nom ayant plusieurs occurences.
+		 * Elle permet d'identifier, à l'aide du prénom saisi par l'utilisateur, l'entrée de la table
+		 * à supprimer.
+		 * =============================================================================================
+		 */
+	    public static void supDuplicata(String nom, String prenom, String genre){
+	    	  try{
+    		Connection cnx = connecterDB()											;
+    		boolean bulle = false													;
+    		boolean bulle2 = false													;
+    		bulle = verifSupDup(prenom, genre)												;
+    		bulle2 = testDuplicata(nom,genre)										;
+    		if (bulle == true){
+    			if (bulle2 == true){
+    				//System.out.println("Duplicata !");
+    				String sql = "DELETE FROM `"+genre+"` WHERE `nom`='"+nom+"'and `prenom`='"+prenom+"'"			;
+	    			Statement sts = cnx.createStatement()								;
+	    			sts.executeUpdate(sql)												;
+	    			nom = convertString(nom)											;
+	    			prenom = convertString(prenom)														;
+	    			System.out.println(genre+" "+nom+", "+prenom+" supprimé.")						;
+    			}
+    		}
+    		else{
+    			nom = convertString(nom)											;
+    			prenom = convertString(prenom)														;
+    			System.out.println("L'entrée "+prenom+" n'existe pas dans la base, associé à "+nom)	;
+    			
+    			//fermeture de la connection
+    	    	cnx.close()															;
+    	    	
+    		}
+    		} catch (SQLException e){
+    			System.out.println(e.getMessage())									;
+    		}
+	    }
+	    
+	    	
 	    
 /**==================================================================================================================================
  * =================================================================================================================================
