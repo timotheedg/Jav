@@ -35,12 +35,12 @@ public class Menu {
 			System.out.println("|  Veuillez effectuer un choix :        |");
 			System.out.println("|-1-	Gestion du personnel            |");
 			System.out.println("|-2-	Finances et comptabilité        |");
-			System.out.println("|-3-	Affichage de la  programmation  |");
+			System.out.println("|-3-	Afficher personnel              |");
 			System.out.println("|-4-	Gestion des spectateurs         |");
 			System.out.println("|-5-	Gestion des commerces           |");
 			System.out.println("|-6-	Gestion des concerts            |");			
 			System.out.println("|-0-	Quitter                         |");
-			System.out.println("|---------------------------------------|");
+			System.out.println("|-------------------------------------------|");
 			System.out.print("Choix :");
 			choix = sc.nextInt();
 		
@@ -51,7 +51,7 @@ public class Menu {
 				case 2 : System.out.println("Vous allez être redirigé vers Finances et comptabilité\n");
 						menuFinance();
 					break;
-				case 3 : System.out.println("Vous allez être redirigé vers Affichage de la  programmation\n");
+				case 3 : System.out.println("Vous allez être redirigé vers Afficher personnel\n");
 						menuAffichage();
 					break;
 				case 4 : System.out.println("Vous allez être redirigé vers Gestion des spectateurs\n");
@@ -587,7 +587,7 @@ public class Menu {
 		while (choix != 0){
 			System.out.println("|-----------Menu Affichage----------------|");
 			System.out.println("|  Veuillez effectuer un choix :          |");
-			System.out.println("|-1-	Afficher toute la programmation   |");
+			System.out.println("|-1-	Afficher tout le personnel        |");
 			System.out.println("|-2-	Afficher les artistes             |");
 			System.out.println("|-3-	Afficher les commerces            |");
 			System.out.println("|-4-	Afficher la sécurité              |");
@@ -674,7 +674,7 @@ public class Menu {
 				Scanner scaa = new Scanner(System.in);
 				boolean conda = false;
 				while (!conda) {
-				System.out.print("Nom : ");
+				System.out.print("Nom (fin pour terminer) : ");
 				noma = scaa.next();
 				conda = noma.equalsIgnoreCase("fin");
 					if (!(noma.equalsIgnoreCase("fin"))){
