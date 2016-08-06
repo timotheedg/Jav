@@ -424,7 +424,7 @@ public class Menu {
 						System.out.println("Le total des bénéfices s'élève à "+ConnectionDB.calculBenefices()+" euros.");
 					}
 					break;
-				case 0 : System.out.println("Vous allez être redirigé vers  Gestion des spectateurs\n");
+				case 0 : System.out.println("Vous allez être redirigé vers le menu général\n");
 					break;
 				default : System.out.println("Erreur de saisie.");
 				}			
@@ -522,7 +522,7 @@ public class Menu {
 			System.out.println("|  Veuillez effectuer un choix :                                      |");
 			System.out.println("|-1-	Calculer les gains par la vente de places au spectateurs      |");
 			System.out.println("|-2-	Calculer les gains par les commerces                          |");
-			System.out.println("|-0-	Retour au menu général                                        |");
+			System.out.println("|-0-	Retour au menu précédent                                      |");
 			System.out.println("|--------------------------------------------|");
 			System.out.print("Choix :");
 			choix = sc.nextInt();
@@ -552,7 +552,7 @@ public class Menu {
 					System.out.println("Le total des gains s'élève à "+ConnectionDB.calculGainsTotal()+" euros.");
 				}
 					break;
-				case 0 : System.out.println("Vous allez être redirigé vers le menu général");
+				case 0 : System.out.println("Vous allez être redirigé vers le menu précédent");
 					break;
 				default : System.out.println("Erreur de saisie.");
 				}			
