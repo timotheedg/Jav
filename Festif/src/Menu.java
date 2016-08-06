@@ -663,10 +663,10 @@ public class Menu {
 			choix = sc.nextInt();
 		
 				switch (choix){
-				case 1 : System.out.println("Vous allez être redirigé vers Afficher spectateur");	
+				case 1 : System.out.println("Vous allez être redirigé vers Afficher spectateur\n");	
 					ConnectionDB.lectureSpectateur();
 					break;
-				case 2 : System.out.println("Vous allez être redirigé vers Ajouter spectateur");
+				case 2 : System.out.println("Vous allez être redirigé vers Ajouter spectateur\n");
 				String noma ="";
 				String prenoma;
 				float tarif;
@@ -682,7 +682,7 @@ public class Menu {
 					prenoma = scaa.next();
 					System.out.print("age : ");
 					age = scaa.nextInt();	
-					System.out.println("tarif : ");
+					System.out.print("tarif : ");
 					tarif = scaa.nextFloat();
 					noma = noma.toUpperCase();
 					prenoma = prenoma.toUpperCase();
@@ -699,9 +699,19 @@ public class Menu {
 					nom = sca.next();
 					nom = nom.toUpperCase();
 					cond = nom.equalsIgnoreCase("fin");
-					String genre = "artiste";
+					String genre = "spectateur";
 					if((!(nom.equalsIgnoreCase("fin")))){
 						ConnectionDB.suppressOptim(nom, genre);
+						if (ConnectionDB.testDuplicata(nom, genre)==true){
+							nom = ConnectionDB.convertString(nom);
+							String prenom ="";
+							System.out.println("Il y a plusieurs entrée pour "+nom+", "+genre+".");
+							nom = nom.toUpperCase();
+							System.out.print("Entrez le prénom de la personne à supprimer : ");
+							prenom = sca.next();
+							prenom = prenom.toUpperCase();
+							ConnectionDB.supDuplicata(nom, prenom, genre);
+						}
 					}
 				}
 					break;
